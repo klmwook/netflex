@@ -4,9 +4,11 @@ function Header() {
 			<h1>NETFLEX - 연습</h1>
 
 			<ul>
-				<li>menu</li>
-				<li>menu</li>
-				<li>menu</li>
+				<li className='headerLink'>HOME</li>
+				<li className='headerLink'>TV Show</li>
+				<li className='headerLink'>Movies</li>
+				<li className='headerLink'>New & Popular</li>
+				<li className='headerLink'>My List</li>
 			</ul>
 		</header>
 	);
