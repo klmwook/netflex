@@ -2,6 +2,7 @@ import Header from '@/components/Header';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import requests from '@/utils/request';
+import Image from 'next/image';
 
 const Home: NextPage = (props) => {
 	console.log(props);
@@ -14,7 +15,9 @@ const Home: NextPage = (props) => {
 
 			<Header />
 
-			<main></main>
+			<main>
+				<Image src={`https://image.tmdb.org/t/p/original${props.top[0].backdrop_path}`} alt='image' width={100} height={100} />
+			</main>
 		</div>
 	);
 };
