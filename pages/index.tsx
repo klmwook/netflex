@@ -4,6 +4,7 @@ import Head from 'next/head';
 import requests from '@/utils/request';
 import Image from 'next/image';
 import { Movie } from '@/types';
+import Banner from '@/components/Banner';
 
 interface Props {
 	original: Movie[];
@@ -17,7 +18,6 @@ interface Props {
 
 //Next 기본으로 제공하는 NextPage타입에는 커스텀 Props타입이 설정되어 있지 않기 때문에 Generic을 활용해서 Props타입의 인터페이스를 직접 변수로 호출할때 설정
 const Home: NextPage<Props> = ({ original, top, sf, drama, fantasy, comedy, action }: Props) => {
-	console.log({ original, top, sf, drama, fantasy, comedy, action });
 	return (
 		<div className='relatvie h-screen bg-gradient-to-b from-[#333] to=[#141414]'>
 			<Head>
@@ -27,7 +27,9 @@ const Home: NextPage<Props> = ({ original, top, sf, drama, fantasy, comedy, acti
 
 			<Header />
 
-			<main></main>
+			<main>
+				<Banner original={original} />
+			</main>
 		</div>
 	);
 };
