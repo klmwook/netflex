@@ -31,10 +31,10 @@ function Banner({ original }: Props) {
 
 			{/* button set */}
 			<nav className='relative z-[3] flex space-x-3'>
-				<button className='bannerButton'>
+				<button className='bannerButton bg-white text-black'>
 					<FaPlay /> Play
 				</button>
-				<button className='bannerButton'>
+				<button className='bannerButton bg-[gray] text-black'>
 					<FaInfoCircle /> More Info
 				</button>
 			</nav>
