@@ -5,10 +5,10 @@ const config: Config = {
 	theme: {
 		extend: {
 			backgroundImage: {
-				gradient1: 'linear-gradient(to-bottom, transparnet, #141414)',
+				gradient1: 'linear-gradient(to bottom, rgba(20,20,20,0), rgba(20,20,20,1))',
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require('tailwind-scrollbar'), require('tailwind-scrollbar-hide')],
 };
 export default config;
