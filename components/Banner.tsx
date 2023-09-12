@@ -22,15 +22,26 @@ function Banner({ original }: Props) {
 				<>
 					{/* pic frame */}
 					<div className='absolute top-0 left-0 z-[1] w-full h-full'>
-						<Image src={`${baseURL}original${Movie.backdrop_path}`} alt={`${Movie.title || Movie.name}`} fill priority quality={70} className='object-cover' />
+						<Image
+							src={`${baseURL}original${Movie.backdrop_path}`}
+							alt={`${Movie.title || Movie.name}`}
+							fill
+							priority
+							quality={70}
+							className='object-cover'
+						/>
 						<div className='absolute botto-0 left-0 w-full h-full bg-gradient1'></div>
 					</div>
 
 					{/* title */}
-					<h1 className='relative z-[3] text-2xl font-bold drop-shadow md:text-4xl lg:text-7xl'>{Movie.title || Movie.name}</h1>
+					<h1 className='relative z-[3] text-2xl font-bold drop-shadow md:text-4xl lg:text-7xl'>
+						{Movie.title || Movie.name}
+					</h1>
 
 					{/* overview */}
-					<p className='relative z-[3] text-xs max-w-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl'>{Movie.overview}</p>
+					<p className='relative z-[3] text-xs max-w-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl'>
+						{Movie.overview}
+					</p>
 
 					{/* button set */}
 					<nav className='relative z-[3] flex space-x-3'>

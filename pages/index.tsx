@@ -37,7 +37,13 @@ const Home: NextPage<Props> = (props: Props) => {
 
 				<section>
 					{Object.values(props).map((category, idx) => {
-						return <Row key={idx} movies={category} title={Object.keys(props)[idx]} />;
+						return (
+							<Row
+								key={idx}
+								movies={category}
+								title={Object.keys(props)[idx]}
+							/>
+						);
 					})}
 				</section>
 			</main>
@@ -49,15 +55,17 @@ export default Home;
 
 export const getServerSideProps = async () => {
 	//promise.all() : promise반환함수를 배열에 인수로 넣어서 병렬식으로 해당 promise가 모두 fullfilled 상태가 되야지만 해당 값을 동기적으로 반환
-	const [original, top, sf, drama, fantasy, comedy, action] = await Promise.all([
-		fetch(requests.original).then((res) => res.json()),
-		fetch(requests.top).then((res) => res.json()),
-		fetch(requests.sf).then((res) => res.json()),
-		fetch(requests.drama).then((res) => res.json()),
-		fetch(requests.fantasy).then((res) => res.json()),
-		fetch(requests.comedy).then((res) => res.json()),
-		fetch(requests.action).then((res) => res.json()),
-	]);
+	const [original, top, sf, drama, fantasy, comedy, action] = await Promise.all(
+		[
+			fetch(requests.original).then((res) => res.json()),
+			fetch(requests.top).then((res) => res.json()),
+			fetch(requests.sf).then((res) => res.json()),
+			fetch(requests.drama).then((res) => res.json()),
+			fetch(requests.fantasy).then((res) => res.json()),
+			fetch(requests.comedy).then((res) => res.json()),
+			fetch(requests.action).then((res) => res.json()),
+		]
+	);
 
 	return {
 		props: {
