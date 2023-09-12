@@ -19,7 +19,10 @@ interface Props {
 
 //Next 기본으로 제공하는 NextPage타입에는 커스텀 Props타입이 설정되어있지 않기 때문에
 //Generic을 활용해서 Props타입의 인터페이스를 직접 변수로 호출할때 설정
-const Home: NextPage<Props> = ({ original, top, sf, drama, fantasy, comedy, action }: Props) => {
+const Home: NextPage<Props> = (props: Props) => {
+	//- 배열로 묶은 데이터를 useState로 담아서 재전달
+	//- 배열로 묶은 데이터를 useRef 참조객체에 담아서 재전달
+	//- 비구조화할당이 아닌 객체를 통채로 받아서 전달해주고 활용하는 컴포넌트내부에서 Object.key() value()로 내부에서 반복 처리
 	return (
 		<div className='relatvie h-screen '>
 			<Head>
@@ -30,10 +33,12 @@ const Home: NextPage<Props> = ({ original, top, sf, drama, fantasy, comedy, acti
 			<Header />
 
 			<main className='relative'>
-				<Banner original={original} />
+				<Banner original={props.original} />
 
 				<section>
-					<Row movies={top} title={'Top Rated'} />
+					{Object.values(props).map((category, idx) => {
+						return <Row key={idx} movies={category} title={Object.keys(props)[idx]} />;
+					})}
 				</section>
 			</main>
 		</div>

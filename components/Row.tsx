@@ -9,8 +9,6 @@ interface Props {
 }
 
 function Row({ title, movies }: Props) {
-	console.log(movies);
-
 	const [Movies, setMovies] = useState<Movie[]>([]);
 
 	useEffect(() => {
