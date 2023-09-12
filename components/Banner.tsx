@@ -1,7 +1,7 @@
 import { Movie } from '@/types';
 import { baseURL } from '@/url';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaPlay, FaInfoCircle } from 'react-icons/fa';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 
 function Banner({ original }: Props) {
 	const [Movie, setMovie] = useState<Movie | null>(null);
+	const Loading = useRef<any>();
 
 	useEffect(() => {
 		const randomNum = Math.floor(Math.random() * original.length);
@@ -29,8 +30,13 @@ function Banner({ original }: Props) {
 							priority
 							quality={70}
 							className='object-cover'
+							onLoadingComplete={() => Loading.current.remove()}
 						/>
 						<div className='absolute botto-0 left-0 w-full h-full bg-gradient1'></div>
+						<div
+							className='w-[40px] h-[40px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[50%] border-4 border-solid border-[orange] rounded-[50%] z-30 border-t-[transparent] bg-red animate-ani-rotation'
+							ref={Loading}
+						></div>
 					</div>
 
 					{/* title */}
