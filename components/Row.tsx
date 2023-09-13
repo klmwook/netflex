@@ -1,6 +1,4 @@
 import { Movie } from '@/types';
-import Image from 'next/image';
-import { baseURL } from '@/url';
 import List from './List';
 
 interface Props {
