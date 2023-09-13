@@ -2,26 +2,27 @@ import Head from 'next/head';
 import Image from 'next/image';
 import logo from '@/public/img/logo.svg';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+//npm i react-hook-form
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface Inputs {
 	email: string;
 	password: string;
 }
-
 function Login() {
 	const [Login, setLogin] = useState<boolean>(false);
 	const {
-		register, //원하는 input 요소에 전개연산자로 등록해서 값 관리
-		handleSubmit, //submit이벤트 발생시 register에 등록된 input값들의 인증처리 함수
-		formState: { errors }, //인증에 실패했을 때 커스텀 에러메시지를 등록 할 수 잇는 객체
+		register,
+		handleSubmit,
+		formState: { errors },
 	} = useForm<Inputs>();
 
-	//handleSubmit함수가 인증처리 완료시 동기적으로 실행될 콜백 함수
-	//해당함수에 등록된 타입은 해당hook이 내장하고 있는 인터페이스로 지정
-	const join: SubmitHandler<Inputs> = async ({ email, password }) => {
-		console.log(`Email : ${email}`);
-		console.log(`Password : ${password}`);
+	//handleSubmit함수이 인증처리 완료시 동기적으로 실행될 콜백함수 등록
+	//해당 콜백함수는 인증에 성공했을만 호출: 인수로 전달되는 값은 관리되고 있는 form의 value값
+	const join: SubmitHandler<Inputs> = ({ email, password }) => {
+		console.log('join');
+		console.log('email', email);
+		console.log('password', password);
 	};
 
 	return (
@@ -49,8 +50,7 @@ function Login() {
 			/>
 
 			<form
-				//submit 이벤트가 발생시 handleSubmit이 인증처리를 해주고 인증의 결과값을 등록된 콜백함수에 전달
-				onSubmit={handleSubmit(join)}
+				onSubmit={handleSubmit(join)} //submit이벤트가 발생시 handleSubmit이 인증처리를 해주고 인증의 결과값을 등록된 콜백함수에 전달
 				className='relative z-50 mt-24 space-y-8 rounded bg-black/70 py-10 px-6 md:mt-0 md:max-w-md md:px-14'
 			>
 				<h1 className='text-4xl font-semibold'>Sign In</h1>
