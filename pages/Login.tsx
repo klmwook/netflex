@@ -19,10 +19,14 @@ function Login() {
 
 	//handleSubmit함수이 인증처리 완료시 동기적으로 실행될 콜백함수 등록
 	//해당 콜백함수는 인증에 성공했을만 호출: 인수로 전달되는 값은 관리되고 있는 form의 value값
-	const join: SubmitHandler<Inputs> = ({ email, password }) => {
-		console.log('join');
-		console.log('email', email);
-		console.log('password', password);
+	const join: SubmitHandler<Inputs> = async ({ email, password }) => {
+		if (Login) {
+			//Sign In 클릭시 처리할 구문
+			console.log('sign in 클릭');
+		} else {
+			//Sign up 클릭시 처리할 구문
+			console.log('sign up 클릭');
+		}
 	};
 
 	return (
@@ -60,25 +64,40 @@ function Login() {
 						type='email'
 						placeholder='Email'
 						className='input'
-						{...register('email', { required: true })}
+						{...register('email', {
+							required: true,
+							minLength: 7,
+							maxLength: 20,
+						})}
 					/>
 					{errors.email && <span>Please enter a valid Email</span>}
 					<input
 						type='password'
 						placeholder='Password'
 						className='input'
-						{...register('password', { required: true })}
+						{...register('password', {
+							required: true,
+							pattern: /[a-zA-Z]+/,
+							minLength: 4,
+							maxLength: 20,
+						})}
 					/>
 					{errors.password && <span>Please enter a valid Password</span>}
 				</div>
 
-				<button className='w-full rounded bg-[#e40914] py-3 font-semibold'>
+				<button
+					className='w-full rounded bg-[#e40914] py-3 font-semibold'
+					onClick={() => setLogin(true)}
+				>
 					Sign In
 				</button>
 
 				<div className='text-[gray]'>
 					New to Nextflix?
-					<button className='text-white ml-4 hover:underline'>
+					<button
+						className='text-white ml-4 hover:underline'
+						onClick={() => setLogin(false)}
+					>
 						Sign up Now
 					</button>
 				</div>
