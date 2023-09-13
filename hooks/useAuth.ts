@@ -43,5 +43,5 @@ export const AuthProvider = ({ children }) => {
 			//한번이라도 인증 로직이 실행되면 초기상태를 false로 설정
 			setInitalLoading(false);
 		});
-	}, [auth]);
+	}, [router]);
 };
