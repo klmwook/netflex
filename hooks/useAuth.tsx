@@ -3,10 +3,12 @@ import { useRouter } from 'next/router';
 import { createContext, useContext, useEffect, useState, useMemo, useRef } from 'react';
 import { auth } from '../firebase';
 
+//InitialLoading의 useRef 객체 타입 지정
 interface Iloading {
 	current: boolean | null;
 }
 
+//전역 context객체 타입 지정
 interface IAuth {
 	UserInfo: User | null;
 	signIn: (email: string, password: string) => Promise<void>;
@@ -15,10 +17,12 @@ interface IAuth {
 	InitialLoading: Iloading;
 }
 
+//AuthProvider 컴포넌트가 감싸는 페이지 컴포넌트의 타입 지정
 interface AuthProviderProps {
 	children: React.ReactNode;
 }
 
+//전역 컨텍스트 값 초기화
 const AuthContext = createContext<IAuth>({
 	UserInfo: null,
 	signUp: async () => {},
@@ -29,9 +33,8 @@ const AuthContext = createContext<IAuth>({
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-	//초기에 useRef로 해당 값을 true지정
-	//추후 firebase를 통해 user정보값이 받아지면 해당값을 false로 변경
-	//해당 값을 state가 아닌 useRef로 담는 이유는 해당값 변경되자마자 해당 렌더링사이클에서 바로 변경점을 적용하기 위함
+	//유저인증 정보가 바뀔때마다 호출
+	//로그인 유무에 따라서 메인, 로그인 페이지로 강제 이동 처리
 	const InitialLoading = useRef<boolean>(true);
 	const [UserInfo, setUserInfo] = useState<User | null>(null);
 	const router = useRouter();

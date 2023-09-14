@@ -11,6 +11,7 @@ interface Props {
 }
 
 function Banner({ original }: Props) {
+	//전역 context로 부터 초기로딩 상태값을 가져옴
 	const { InitialLoading } = useAuth();
 	const loading = useRef<HTMLDivElement>(null);
 

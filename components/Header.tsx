@@ -8,30 +8,20 @@ import useAuth from '@/hooks/useAuth';
 
 function Header() {
 	const [Scrolled, setScrolled] = useState(false);
+	//커스텀 훅으로부터 전역 context에 있는 로그아웃 함수 가져옴
 	const { logout } = useAuth();
 
 	useEffect(() => {
-		const handleScroll = () =>
-			window.scrollY > 0 ? setScrolled(true) : setScrolled(false);
+		const handleScroll = () => (window.scrollY > 0 ? setScrolled(true) : setScrolled(false));
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, []);
 
 	return (
-		<header
-			className={`transition-colors duration-[.5s] ${
-				Scrolled && 'bg-[#141414]'
-			}`}
-		>
+		<header className={`transition-colors duration-[.5s] ${Scrolled && 'bg-[#141414]'}`}>
 			<div className='flex items-center space-x-2 md:space-x-10'>
 				<h1>
-					<Image
-						src={logo}
-						alt='nextflix'
-						width={100}
-						height={100}
-						className='cursor-pointer'
-					/>
+					<Image src={logo} alt='nextflix' width={100} height={100} className='cursor-pointer' />
 				</h1>
 
 				<ul className='space-x-4 hidden md:flex '>
@@ -49,14 +39,7 @@ function Header() {
 				<FaBell className='w-6' />
 				<Link href='/'>
 					{/* 로그아웃 버튼 클릭시 전역context에서 logout함수 가져와서 호출 */}
-					<Image
-						src={profile}
-						width={32}
-						height={32}
-						alt='profile'
-						className='rounded'
-						onClick={logout}
-					/>
+					<Image src={profile} width={32} height={32} alt='profile' className='rounded' onClick={logout} />
 				</Link>
 			</div>
 		</header>

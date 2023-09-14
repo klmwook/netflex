@@ -6,6 +6,7 @@ import { Movie } from '@/types';
 import Banner from '@/components/Banner';
 import Row from '@/components/Row';
 
+//props로 전달받는 data의 타입 지정
 interface Props {
 	original: Movie[];
 	top: Movie[];
@@ -17,12 +18,7 @@ interface Props {
 	random: Movie;
 }
 
-//Next 기본으로 제공하는 NextPage타입에는 커스텀 Props타입이 설정되어있지 않기 때문에
-//Generic을 활용해서 Props타입의 인터페이스를 직접 변수로 호출할때 설정
 const Home: NextPage<Props> = (props: Props) => {
-	//배열로 묶은 데이터를 useState로 담아서 재전달
-	//배열로 묶은 데이터를 useRef 참조객체에 담아서 재전달
-	//비구조화할당이 아닌 객체를 통채로 받아서 전달해주고 활용하는 컴포넌트내부에서 Object.key(). value()로 내부에서 반복처리
 	return (
 		<div className='relatvie h-screen '>
 			<Head>
@@ -30,15 +26,17 @@ const Home: NextPage<Props> = (props: Props) => {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
+			{/* Header 컴포넌트 - 로그아웃 버튼 포함 */}
 			<Header />
 
 			<main className='relative'>
-				{/* 서버쪽에서 미리 랜덤으로 만들어준 데이터 객체하나를 바로 전달 */}
+				{/* Banner 컴포넌트 - 랜덤 데이터 전달 */}
 				<Banner original={props.random} />
 
 				<section>
+					{/* row 컴포넌트 - props 전달된 데이터 배열들을 반복 처리 */}
 					{Object.values(props)
-						//value값에는 배열이 아닌 객체도 있으므로 length값이 없는 객체는 제외하고 반복처리
+						//데이터 하나는 배열이 아니므로 해당 데이터 제외하고 반복처리
 						.filter((data) => data.length)
 						.map((category, idx) => (
 							<Row key={idx} movies={category} title={Object.keys(props)[idx]} />
@@ -52,7 +50,7 @@ const Home: NextPage<Props> = (props: Props) => {
 export default Home;
 
 export const getServerSideProps = async () => {
-	//promise.all() : promise반환함수를 배열에 인수로 넣어서 병렬식으로 해당 promise가 모두 fullfilled 상태가 되야지만 해당 값을 동기적으로 반환
+	//서버쪽에서 ssr 방식으로 미리 data fetching
 	const [original, top, science_fiction, drama, TV_movies, comedy, western] = await Promise.all([
 		fetch(requests.original).then((res) => res.json()),
 		fetch(requests.top).then((res) => res.json()),
@@ -63,9 +61,11 @@ export const getServerSideProps = async () => {
 		fetch(requests.western).then((res) => res.json()),
 	]);
 
+	//fetching된 데이터 배열중에서 original데이터 배열만 랜덤으로 객체정보 하나 분류
 	const randomOrigin = original.results[Math.floor(Math.random() * original.results.length)];
 
 	return {
+		//페이지 컴포넌트의 prop로 위의 데이터 전달
 		props: {
 			original: original.results,
 			top_rated: top.results,
