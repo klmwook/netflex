@@ -4,12 +4,15 @@ import logo from '@/public/img/logo.svg';
 import { useState } from 'react';
 //npm i react-hook-form
 import { useForm, SubmitHandler } from 'react-hook-form';
+import useAuth from '@/hooks/useAuth';
 
 interface Inputs {
 	email: string;
 	password: string;
 }
 function Login() {
+	console.log('login');
+	const { signIn, signUp } = useAuth();
 	const [Login, setLogin] = useState<boolean>(false);
 	const {
 		register,
@@ -23,9 +26,13 @@ function Login() {
 		if (Login) {
 			//Sign In 클릭시 처리할 구문
 			console.log('sign in 클릭');
+			//전역컨텍스트에서 로그인함수 가지고와서 호출
+			await signIn(email, password);
 		} else {
 			//Sign up 클릭시 처리할 구문
 			console.log('sign up 클릭');
+			//전역컨텍스트에서 회원가입 함수 가져와서 호출
+			await signUp(email, password);
 		}
 	};
 
@@ -77,7 +84,6 @@ function Login() {
 						className='input'
 						{...register('password', {
 							required: true,
-							pattern: /[a-zA-Z]+/,
 							minLength: 4,
 							maxLength: 20,
 						})}
