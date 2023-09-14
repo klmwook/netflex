@@ -21,4 +21,7 @@
 	.input {
 		@apply w-full rounded bg-[#333] px-5 py-3.5 placeholder-[gray] outline-none focus:bg-[#454545];
 	}
+	.loading {
+		@apply w-[40px] h-[40px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] border-4 border-t-[transparent] border-solid border-[orange] rounded-[50%] z-50  animate-ani-rotation;
+	}
 }
