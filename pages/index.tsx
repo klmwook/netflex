@@ -5,6 +5,9 @@ import requests from '@/utils/request';
 import { Movie } from '@/types';
 import Banner from '@/components/Banner';
 import Row from '@/components/Row';
+import Modal from '@/components/Modal';
+import { useRecoilValue } from 'recoil';
+import { modalState } from '@/recoil/globalAtom';
 
 //props로 전달받는 data의 타입 지정
 interface Props {
@@ -19,6 +22,7 @@ interface Props {
 }
 
 const Home: NextPage<Props> = (props: Props) => {
+	const showModal = useRecoilValue(modalState);
 	return (
 		<div className='relatvie h-screen '>
 			<Head>
@@ -43,6 +47,7 @@ const Home: NextPage<Props> = (props: Props) => {
 						))}
 				</section>
 			</main>
+			{showModal && <Modal />}
 		</div>
 	);
 };

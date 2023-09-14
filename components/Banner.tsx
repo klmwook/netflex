@@ -5,6 +5,8 @@ import { baseURL } from '@/url';
 import Image from 'next/image';
 import { useRef } from 'react';
 import { FaPlay, FaInfoCircle } from 'react-icons/fa';
+import { useRecoilState } from 'recoil';
+import { modalState } from '@/recoil/globalAtom';
 
 interface Props {
 	original: Movie;
@@ -14,6 +16,7 @@ function Banner({ original }: Props) {
 	//전역 context로 부터 초기로딩 상태값을 가져옴
 	const { InitialLoading } = useAuth();
 	const loading = useRef<HTMLDivElement>(null);
+	const [ShowModal, setShowModal] = useRecoilState(modalState);
 
 	return (
 		<section className='h-[50vh] px-4 pb-20 pt-40 flex flex-col space-y-4 py-16 md:space-y-8 lg:space-y-12 lg:px-16 md:h-[60vh] lg:h-[85vh] lg:justify-end overflow-hidden relative'>
@@ -47,7 +50,7 @@ function Banner({ original }: Props) {
 
 					{/* button set */}
 					<nav className='relative z-[3] flex space-x-3'>
-						<button className='bannerButton bg-white text-black'>
+						<button className='bannerButton bg-white text-black' onClick={() => setShowModal(true)}>
 							<FaPlay /> Play
 						</button>
 						<button className='bannerButton bg-[gray] text-white'>
