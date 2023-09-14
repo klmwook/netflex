@@ -6,29 +6,22 @@ import { useEffect, useState, useRef, RefObject } from 'react';
 import { FaPlay, FaInfoCircle } from 'react-icons/fa';
 
 interface Props {
-	original: Movie[];
+	original: Movie;
 }
 
 function Banner({ original }: Props) {
-	const [IsClient, setIsClient] = useState(false);
-
 	const loading = useRef<HTMLDivElement>(null);
-	const movieData = useRef<Movie | null>(null);
-	movieData.current = original[Math.floor(Math.random() * original.length)];
-
-	useEffect(() => {
-		setIsClient(true);
-	}, []);
 
 	return (
 		<section className='px-4 pb-20 pt-40  flex flex-col space-y-4 py-16 md:space-y-8 lg:space-y-12 lg:px-16 lg:h-[85vh] lg:justify-end overflow-hidden relative'>
-			{IsClient && (
+			{
 				<>
 					{/* pic frame */}
 					<div className='absolute top-0 left-0 z-[1] w-full h-full opacity-80'>
 						<Image
-							src={`${baseURL}original${movieData.current.backdrop_path}`}
-							alt={`${movieData.current.title || movieData.current.name}`}
+							//서버에서 random으로 전달한 데이터를 바로 활용
+							src={`${baseURL}original${original.backdrop_path}`}
+							alt={`${original.title || original.name}`}
 							fill
 							priority
 							className='object-cover'
@@ -42,10 +35,10 @@ function Banner({ original }: Props) {
 					</div>
 
 					{/* title */}
-					<h1 className='relative z-[3] text-2xl font-bold drop-shadow md:text-4xl lg:text-7xl'>{movieData.current.title || movieData.current.name}</h1>
+					<h1 className='relative z-[3] text-2xl font-bold drop-shadow md:text-4xl lg:text-7xl'>{original.title || original.name}</h1>
 
 					{/* overview */}
-					<p className='relative z-[3] text-xs max-w-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl'>{movieData.current.overview}</p>
+					<p className='relative z-[3] text-xs max-w-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl'>{original.overview}</p>
 
 					{/* button set */}
 					<nav className='relative z-[3] flex space-x-3'>
@@ -57,7 +50,7 @@ function Banner({ original }: Props) {
 						</button>
 					</nav>
 				</>
-			)}
+			}
 		</section>
 	);
 }

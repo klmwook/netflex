@@ -15,6 +15,7 @@ interface Props {
 	horror: Movie[];
 	comedy: Movie[];
 	action: Movie[];
+	random: Movie;
 }
 
 //Next 기본으로 제공하는 NextPage타입에는 커스텀 Props타입이 설정되어있지 않기 때문에
@@ -33,12 +34,16 @@ const Home: NextPage<Props> = (props: Props) => {
 			<Header />
 
 			<main className='relative'>
-				<Banner original={props.original} />
+				{/* 서버쪽에서 미리 랜덤으로 만들어준 데이터 객체하나를 바로 전달 */}
+				<Banner original={props.random} />
 
 				<section>
-					{Object.values(props).map((category, idx) => (
-						<Row key={idx} movies={category} title={Object.keys(props)[idx]} />
-					))}
+					{Object.values(props)
+						//value값에는 배열이 아닌 객체도 있으므로 length값이 없는 객체는 제외하고 반복처리
+						.filter((data) => data.length)
+						.map((category, idx) => (
+							<Row key={idx} movies={category} title={Object.keys(props)[idx]} />
+						))}
 				</section>
 			</main>
 		</div>
@@ -70,7 +75,7 @@ export const getServerSideProps = async () => {
 			TV_movies: TV_movies.results,
 			comedy: comedy.results,
 			western: western.results,
-			ramdom: randomOrigin,
+			random: randomOrigin,
 		},
 	};
 };
