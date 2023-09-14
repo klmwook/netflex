@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { baseURL } from '@/url';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { useRef } from 'react';
+import { useRecoilState } from 'recoil';
+import { modalState, movieState } from '@/recoil/globalAtom';
 
 interface Props {
 	movies: Movie[];
@@ -10,6 +12,8 @@ interface Props {
 
 function List({ movies }: Props) {
 	const listFrame = useRef<HTMLUListElement>(null);
+	const [_, setShowModal] = useRecoilState(modalState);
+	const [MovieInfo, setMovieInfo] = useRecoilState(movieState);
 
 	const handleClick = (direction: string) => {
 		if (listFrame.current) {
@@ -17,10 +21,7 @@ function List({ movies }: Props) {
 			console.log('scrollLeft', scrollLeft);
 			console.log('clientWidth', clientWidth);
 			//좌우버튼 클릭시 인수로 들어오는 방향에 따라 가로축으로 이동할 타겟 위치값을 구해서 scrollTo이동처리
-			const targetPos =
-				direction === 'left'
-					? scrollLeft - clientWidth
-					: scrollLeft + clientWidth;
+			const targetPos = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
 			listFrame.current.scrollTo({ left: targetPos, behavior: 'smooth' });
 		}
 	};
@@ -33,10 +34,7 @@ function List({ movies }: Props) {
 			>
 				{movies.map((movie, idx) => {
 					return (
-						<li
-							key={idx}
-							className='min-w-[120px] h-[70px] relative md:min-w-[180px] md:h-[80px] lg:min-w-[200px] lg:h-[100px]'
-						>
+						<li key={idx} className='min-w-[120px] h-[70px] relative md:min-w-[180px] md:h-[80px] lg:min-w-[200px] lg:h-[100px]'>
 							<Image
 								src={`${baseURL}w300${movie.backdrop_path}`}
 								alt={`${movie.title || movie.name}`}
@@ -46,21 +44,19 @@ function List({ movies }: Props) {
 								blurDataURL={`${baseURL}w300${movie.backdrop_path}`}
 								sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
 								className='object-cover'
+								onClick={() => {
+									setShowModal(true);
+									setMovieInfo(movie);
+								}}
 							/>
 						</li>
 					);
 				})}
 			</ul>
 
-			<FaAngleLeft
-				className='absolute top-0 bottom-0 left-2 z-40 m-auto h-9 cursor-pointer opacity-0 group-hover:opacity-100'
-				onClick={() => handleClick('left')}
-			/>
+			<FaAngleLeft className='absolute top-0 bottom-0 left-2 z-40 m-auto h-9 cursor-pointer opacity-0 group-hover:opacity-100' onClick={() => handleClick('left')} />
 
-			<FaAngleRight
-				className='absolute top-0 bottom-0 right-2 z-40 m-auto h-9 cursor-pointer opacity-0 group-hover:opacity-100'
-				onClick={() => handleClick('right')}
-			/>
+			<FaAngleRight className='absolute top-0 bottom-0 right-2 z-40 m-auto h-9 cursor-pointer opacity-0 group-hover:opacity-100' onClick={() => handleClick('right')} />
 		</>
 	);
 }
