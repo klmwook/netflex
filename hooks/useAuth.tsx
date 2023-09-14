@@ -1,10 +1,4 @@
-import {
-	createUserWithEmailAndPassword,
-	onAuthStateChanged,
-	signInWithEmailAndPassword,
-	signOut,
-	User,
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { auth } from '../firebase';
@@ -48,7 +42,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			} else {
 				setUserInfo(null);
 				setLoading(true);
-				router.push('/login');
+				router.push('/Login');
 			}
 			//한번이라도 인증로직이 실행되면 초기상태를 false로 변경
 			setInitialLoading(false);
@@ -93,16 +87,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	};
 
 	//새로고침시 같은 로그인 정보값이면 해당 값을 다시 연산하지 않도록 메모이제이션처리해서 전역 context에 넘기고
-	const memoedContext = useMemo(
-		() => ({ UserInfo, signIn, signUp, logout, Loading, Errors }),
-		[UserInfo, Loading]
-	);
+	const memoedContext = useMemo(() => ({ UserInfo, signIn, signUp, logout, Loading, Errors }), [UserInfo, Loading]);
 	//로그인정보값이 들어와있을때에만 화면 출력
-	return (
-		<AuthContext.Provider value={memoedContext}>
-			{!InitialLoading && children}
-		</AuthContext.Provider>
-	);
+	return <AuthContext.Provider value={memoedContext}>{!InitialLoading && children}</AuthContext.Provider>;
 };
 
 export default function useAuth() {

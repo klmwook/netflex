@@ -42,14 +42,10 @@ function Banner({ original }: Props) {
 					</div>
 
 					{/* title */}
-					<h1 className='relative z-[3] text-2xl font-bold drop-shadow md:text-4xl lg:text-7xl'>
-						{movieData.current.title || movieData.current.name}
-					</h1>
+					<h1 className='relative z-[3] text-2xl font-bold drop-shadow md:text-4xl lg:text-7xl'>{movieData.current.title || movieData.current.name}</h1>
 
 					{/* overview */}
-					<p className='relative z-[3] text-xs max-w-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl'>
-						{movieData.current.overview}
-					</p>
+					<p className='relative z-[3] text-xs max-w-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl'>{movieData.current.overview}</p>
 
 					{/* button set */}
 					<nav className='relative z-[3] flex space-x-3'>

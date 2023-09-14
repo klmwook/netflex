@@ -49,16 +49,17 @@ export default Home;
 
 export const getServerSideProps = async () => {
 	//promise.all() : promise반환함수를 배열에 인수로 넣어서 병렬식으로 해당 promise가 모두 fullfilled 상태가 되야지만 해당 값을 동기적으로 반환
-	const [original, top, science_fiction, drama, TV_movies, comedy, western] =
-		await Promise.all([
-			fetch(requests.original).then((res) => res.json()),
-			fetch(requests.top).then((res) => res.json()),
-			fetch(requests.science_fiction).then((res) => res.json()),
-			fetch(requests.drama).then((res) => res.json()),
-			fetch(requests.TV_movies).then((res) => res.json()),
-			fetch(requests.comedy).then((res) => res.json()),
-			fetch(requests.western).then((res) => res.json()),
-		]);
+	const [original, top, science_fiction, drama, TV_movies, comedy, western] = await Promise.all([
+		fetch(requests.original).then((res) => res.json()),
+		fetch(requests.top).then((res) => res.json()),
+		fetch(requests.science_fiction).then((res) => res.json()),
+		fetch(requests.drama).then((res) => res.json()),
+		fetch(requests.TV_movies).then((res) => res.json()),
+		fetch(requests.comedy).then((res) => res.json()),
+		fetch(requests.western).then((res) => res.json()),
+	]);
+
+	const randomOrigin = original.results[Math.floor(Math.random() * original.results.length)];
 
 	return {
 		props: {
@@ -69,6 +70,7 @@ export const getServerSideProps = async () => {
 			TV_movies: TV_movies.results,
 			comedy: comedy.results,
 			western: western.results,
+			ramdom: randomOrigin,
 		},
 	};
 };
