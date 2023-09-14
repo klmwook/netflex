@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Movie } from '@/types';
 import Banner from '@/components/Banner';
 import Row from '@/components/Row';
+import useAuth from '@/hooks/useAuth';
 
 interface Props {
 	original: Movie[];
@@ -21,6 +22,7 @@ interface Props {
 //Next 기본으로 제공하는 NextPage타입에는 커스텀 Props타입이 설정되어있지 않기 때문에
 //Generic을 활용해서 Props타입의 인터페이스를 직접 변수로 호출할때 설정
 const Home: NextPage<Props> = (props: Props) => {
+	const { InitialLoading } = useAuth();
 	//배열로 묶은 데이터를 useState로 담아서 재전달
 	//배열로 묶은 데이터를 useRef 참조객체에 담아서 재전달
 	//비구조화할당이 아닌 객체를 통채로 받아서 전달해주고 활용하는 컴포넌트내부에서 Object.key(). value()로 내부에서 반복처리
@@ -35,7 +37,7 @@ const Home: NextPage<Props> = (props: Props) => {
 
 			<main className='relative'>
 				{/* 서버쪽에서 미리 랜덤으로 만들어준 데이터 객체하나를 바로 전달 */}
-				<Banner original={props.random} />
+				{!InitialLoading.current && <Banner original={props.random} />}
 
 				<section>
 					{Object.values(props)

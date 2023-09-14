@@ -1,15 +1,18 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
 import { useRouter } from 'next/router';
-import { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo, useRef } from 'react';
 import { auth } from '../firebase';
+
+interface Iloading {
+	current: boolean | null;
+}
 
 interface IAuth {
 	UserInfo: User | null;
 	signIn: (email: string, password: string) => Promise<void>;
 	signUp: (email: string, password: string) => Promise<void>;
 	logout: () => Promise<void>;
-	Errors: string | null;
-	Loading: boolean;
+	InitialLoading: Iloading;
 }
 
 interface AuthProviderProps {
@@ -21,15 +24,14 @@ const AuthContext = createContext<IAuth>({
 	signUp: async () => {},
 	signIn: async () => {},
 	logout: async () => {},
-	Errors: null,
-	Loading: false,
+	InitialLoading: { current: true },
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+	const InitialLoading = useRef<boolean>(true);
 	const [Loading, setLoading] = useState<boolean>(false);
 	const [UserInfo, setUserInfo] = useState<User | null>(null);
 	const [Errors, setErrors] = useState<string | null>(null);
-	const [InitialLoading, setInitialLoading] = useState<boolean>(true);
 	const router = useRouter();
 
 	useEffect(() => {
@@ -38,14 +40,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			if (user) {
 				setUserInfo(user);
 				setLoading(false);
-				setTimeout(() => router.push('/'), 0);
+				router.push('/');
 			} else {
 				setUserInfo(null);
 				setLoading(true);
 				router.push('/Login');
 			}
 			//한번이라도 인증로직이 실행되면 초기상태를 false로 변경
-			setInitialLoading(false);
+			InitialLoading.current = false;
 		});
 	}, []);
 
@@ -87,9 +89,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	};
 
 	//새로고침시 같은 로그인 정보값이면 해당 값을 다시 연산하지 않도록 메모이제이션처리해서 전역 context에 넘기고
-	const memoedContext = useMemo(() => ({ UserInfo, signIn, signUp, logout, Loading, Errors }), [UserInfo, Loading]);
+	const memoedContext = useMemo(() => ({ UserInfo, signIn, signUp, logout, InitialLoading }), [UserInfo, InitialLoading]);
 	//로그인정보값이 들어와있을때에만 화면 출력
-	return <AuthContext.Provider value={memoedContext}>{!InitialLoading && children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={memoedContext}>{children}</AuthContext.Provider>;
 };
 
 export default function useAuth() {
