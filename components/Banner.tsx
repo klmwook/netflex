@@ -1,8 +1,9 @@
+import useAuth from '@/hooks/useAuth';
 import { useRefDom } from '@/hooks/useRefDom';
 import { Movie } from '@/types';
 import { baseURL } from '@/url';
 import Image from 'next/image';
-import { useEffect, useState, useRef, RefObject } from 'react';
+import { useRef } from 'react';
 import { FaPlay, FaInfoCircle } from 'react-icons/fa';
 
 interface Props {
@@ -10,11 +11,17 @@ interface Props {
 }
 
 function Banner({ original }: Props) {
+	const { InitialLoading } = useAuth();
 	const loading = useRef<HTMLDivElement>(null);
 
 	return (
 		<section className='px-4 pb-20 pt-40  flex flex-col space-y-4 py-16 md:space-y-8 lg:space-y-12 lg:px-16 lg:h-[85vh] lg:justify-end overflow-hidden relative'>
-			{
+			{InitialLoading.current ? (
+				//user인증정보 받아지기 전까지는 프레임 틀은 유지하되 로딩바만 보이고
+				//인증정보 받아지면 데이터 출력
+				//새로고침시 인증정보 바뀔때마다 두번 렌더링되는 것을 방지하기 위함
+				<div className='w-[40px] h-[40px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] border-4 border-t-[transparent] border-solid border-[orange] rounded-[50%] z-50 bg-red animate-rotation'></div>
+			) : (
 				<>
 					{/* pic frame */}
 					<div className='absolute top-0 left-0 z-[1] w-full h-full opacity-80'>
@@ -50,7 +57,7 @@ function Banner({ original }: Props) {
 						</button>
 					</nav>
 				</>
-			}
+			)}
 		</section>
 	);
 }
