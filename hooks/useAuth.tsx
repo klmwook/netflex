@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	//유저인증 정보가 바뀔때마다 호출
 	//로그인 유무에 따라서 메인, 로그인 페이지로 강제 이동 처리
 	const InitialLoading = useRef<boolean>(true);
+	const isMask = useRef<boolean>(false);
 	const [UserInfo, setUserInfo] = useState<User | null>(null);
 	const router = useRouter();
 
@@ -50,19 +51,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			3. useAuth 훅 안에서 유저정보값이 변경될 때 마다 setTimeout으로 강제 debouncing적용
 	*/
 	useEffect(() => {
-		console.log('auth');
 		onAuthStateChanged(auth, (user) => {
 			if (user) {
 				setUserInfo(user);
-				router.push('/');
+				//인증정보가 바뀌는 순간 로딩화면을 바로 보여줌
+				isMask.current = true;
+				//0.2초동안 debouncing처리완료후 로딩화면 없애고 라우터 이동
+				setTimeout(() => {
+					isMask.current = false;
+					router.push('/');
+				}, 200);
 			} else {
 				setUserInfo(null);
-				//메인에서 로그인 페이지 넘어갈때 0.6초 동안 push가 중복실행되지 못하도록 debouncing적용
-				setTimeout(() => router.push('/Login'), 600);
+				isMask.current = true;
+				//메인에서 로그인페이지 넘어갈때 0.4초동안 push가 중복실행되지 못하도록 debouncing적용
+				setTimeout(() => {
+					isMask.current = false;
+					router.push('/Login');
+				}, 400);
 			}
-			//한번이라도 인증로직이 실행되면 초기상태를 false로 변경
-			//user정보값이 받아지고 동기적으로 해당값을 false로 변경하기 위해서
-			//setTimeout을 이용해서 강제로 web api에 전달했다 받음 (동기화) : promise로 가능
 			setTimeout(() => (InitialLoading.current = false), 0);
 		});
 	}, []);
@@ -98,7 +105,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const memoedContext = useMemo(() => ({ UserInfo, signIn, signUp, logout, InitialLoading }), [UserInfo, InitialLoading]);
 	//로그인정보값이 들어와있을때에만 화면 출력
 	//실시간으로 적용되는 IntialLoading값을 전역 context에 담음
-	return <AuthContext.Provider value={memoedContext}>{!InitialLoading.current ? children : <div className='loading'></div>}</AuthContext.Provider>;
+	return (
+		<AuthContext.Provider value={memoedContext}>
+			{!InitialLoading.current ? children : <div className='loading'></div>}
+			{/* isMask값이 true면 마스크화면 추가 false면 제거 */}
+			{isMask.current ? (
+				<div className='w-full h-screen fixed top-0 left-0 z-50 bg-black/90'>
+					<div className='loading'></div>
+				</div>
+			) : null}
+		</AuthContext.Provider>
+	);
 };
 
 export default function useAuth() {
