@@ -1,38 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#정규표현식 (Regular Expression / RegEx)
+/..정규표현식../ 안쪽에 정규표현식을 입력해서 문자의 조건을 표현식으로 매칭
 
-## Getting Started
+## ^
 
-First, run the development server:
+문자의 시작 조건을 알리는 표현식
+/^[0-9]/ : 무조건 숫자로 시작해야 됨.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## $
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+문자의 종료조건을 알리는 표현식
+/ [a-z]$ : 무조건 소문자로 끝나야됨
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## [ ]
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+문자의 조건 범위를 지정하는 표현식
+/[a-z]/ : 모든 소문자범위
+/[0-5]/ : 0에서 5사이의 숫자 범위
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## .
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+모든 문자를 다 허용하는 표현식
 
-## Learn More
+## \*
 
-To learn more about Next.js, take a look at the following resources:
+이전 조건의 값이 0번이상 반복처리
+[a-z]\* : 소문자가 0번 이상 있어야 됨
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## +
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+이전 조건의 값이 무조건 1번이상 반복처리
+[A-Z]+ : 대문자가 무조건 1번 이상 있어야됨
 
-## Deploy on Vercel
+## ()
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+여러가지의 조건을 그룹화하는 표현식
+([a-z][0-9]) : 모든 소문자, 모든 숫자를 허용
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## ?
+
+이전 조건을 선택사항 처리
+@? : @가 있어도 그만 없어도 그만
+
+## {최소글자, 최대글자}
+
+(정규표현식 패턴){3,10} : 해당 패턴을 적용해서 최소 3글자 이상 10글자 미만의 글자수 범위 지정
+
+## (?=)패턴
+
+전방탐색자 : 해당 패턴이 무조건 있어야되고 해당 패턴을 기준으로 앞의 값을 탐색
+
+## (?<=)패턴
+
+후방탐색자 : 해당 패턴이 무조건 있어야 되고 해당 패턴을 기준으로 뒤의 값을 탐색
